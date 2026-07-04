@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cà Phê Lạc Việt — Quán cà phê pixel</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-palette="#bf7f1c,#bd4f33,#178f72">
+
+<!-- ============ MÀN HÌNH ĐĂNG NHẬP ============ -->
+<div id="view-login" class="view">
+  <div class="login-wrap">
+    <div class="login-drum" id="login-drum"></div>
+    <h1 class="game-title">CÀ PHÊ LẠC VIỆT</h1>
+    <p class="game-sub">~ Hương vị Việt, phong cách pixel ~</p>
+    <div class="zigzag"></div>
+
+    <div class="panel login-panel pxborder">
+      <div class="role-tabs">
+        <button class="role-tab active" data-role="customer">🧑 Khách hàng</button>
+        <button class="role-tab" data-role="shop">🏪 Chủ quán</button>
+      </div>
+
+      <form id="login-form" autocomplete="off">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="login-user" placeholder="vd: khach" required>
+        <label>Mật khẩu</label>
+        <input type="password" id="login-pass" placeholder="••••••" required>
+        <p class="form-err" id="login-err"></p>
+        <button type="submit" class="btn btn-green btn-block">▶ VÀO QUÁN</button>
+      </form>
+
+      <div id="register-box">
+        <div class="divider"><span>hoặc</span></div>
+        <button class="btn btn-block" id="btn-show-register">✚ Tạo tài khoản khách mới</button>
+      </div>
+
+      <div class="demo-hint">
+        <b>Tài khoản dùng thử:</b><br>
+        Khách: <code>khach / 123456</code><br>
+        Quán: <code>admin / admin123</code>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GIAO DIỆN KHÁCH ============ -->
+<div id="view-customer" class="view hidden">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="drum-mini" data-drum></span>
+      <span class="brand-name">CÀ PHÊ LẠC VIỆT</span>
+    </div>
+    <div class="topbar-actions">
+      <span class="hello" id="cust-hello"></span>
+      <button class="btn btn-small" id="btn-my-orders">📜 Đơn của tôi <span class="badge hidden" id="my-orders-badge"></span></button>
+      <button class="btn btn-small btn-green" id="btn-cart">🧺 Giỏ hàng <span class="badge hidden" id="cart-badge"></span></button>
+      <button class="btn btn-small btn-red" id="btn-cust-logout">⏻ Thoát</button>
+    </div>
+  </header>
+  <div class="zigzag"></div>
+
+  <main class="cust-main">
+    <div class="cat-chips" id="cat-chips"></div>
+    <div class="product-grid" id="product-grid"></div>
+  </main>
+
+  <!-- Giỏ hàng -->
+  <aside class="cart-drawer hidden" id="cart-drawer">
+    <div class="cart-head">
+      <h3>🧺 Giỏ hàng</h3>
+      <button class="btn btn-small btn-red" id="btn-close-cart">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-foot">
+      <div class="cart-total">Tổng: <b id="cart-total">0₫</b></div>
+      <label>Ghi chú cho quán</label>
+      <textarea id="cart-note" rows="2" placeholder="vd: ít đường, nhiều đá..."></textarea>
+      <button class="btn btn-green btn-block" id="btn-place-order">🔔 ĐẶT HÀNG</button>
+    </div>
+  </aside>
+
+  <!-- Đơn của tôi -->
+  <div class="overlay hidden" id="my-orders-overlay">
+    <div class="panel pxborder modal-panel">
+      <div class="modal-head"><h3>📜 Đơn của tôi</h3><button class="btn btn-small btn-red" id="btn-close-my-orders">✕</button></div>
+      <div class="modal-body" id="my-orders-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GIAO DIỆN QUÁN ============ -->
+<div id="view-shop" class="view hidden">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="drum-mini" data-drum></span>
+      <span class="brand-name">QUẢN LÝ QUÁN</span>
+    </div>
+    <div class="topbar-actions">
+      <span class="hello" id="shop-hello"></span>
+      <button class="btn btn-small btn-red" id="btn-shop-logout">⏻ Thoát</button>
+    </div>
+  </header>
+  <div class="zigzag"></div>
+
+  <div class="shop-layout">
+    <nav class="sidebar">
+      <button class="nav-item active" data-panel="orders">🔔 Đơn hàng <span class="badge hidden" id="pending-badge"></span></button>
+      <button class="nav-item" data-panel="products">☕ Sản phẩm</button>
+      <button class="nav-item" data-panel="revenue">📈 Doanh thu</button>
+      <button class="nav-item" data-panel="inventory">📦 Kho nguyên liệu <span class="badge badge-warn hidden" id="low-stock-badge"></span></button>
+      <button class="nav-item" data-panel="report">💰 Báo cáo lãi/lỗ</button>
+      <button class="nav-item" data-panel="recipes">📖 Công thức</button>
+      <button class="nav-item" data-panel="tasks">✅ Checklist & Việc</button>
+    </nav>
+
+    <main class="shop-main">
+      <section class="shop-panel" id="panel-orders"></section>
+      <section class="shop-panel hidden" id="panel-products"></section>
+      <section class="shop-panel hidden" id="panel-revenue"></section>
+      <section class="shop-panel hidden" id="panel-inventory"></section>
+      <section class="shop-panel hidden" id="panel-report"></section>
+      <section class="shop-panel hidden" id="panel-recipes"></section>
+      <section class="shop-panel hidden" id="panel-tasks"></section>
+    </main>
+  </div>
+</div>
+
+<!-- Modal dùng chung -->
+<div class="overlay hidden" id="modal-overlay">
+  <div class="panel pxborder modal-panel" id="modal-panel"></div>
+</div>
+
+<div id="toast-box"></div>
+
+<script src="js/db.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/customer.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
