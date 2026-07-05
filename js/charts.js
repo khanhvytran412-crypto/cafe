@@ -39,6 +39,13 @@ function renderBarChart(container, buckets, series, opts) {
 
   container.innerHTML = html;
 
+  // màn hình hẹp: thưa bớt nhãn trục X cho khỏi dính nhau
+  const labels = container.querySelectorAll('.chart-xlabels span');
+  const step = Math.ceil((buckets.length * 40) / Math.max(container.clientWidth - 44, 1));
+  if (step > 1) labels.forEach((el, i) => {
+    if ((buckets.length - 1 - i) % step !== 0) el.style.visibility = 'hidden';
+  });
+
   // tooltip
   const area = container.querySelector('.chart-area');
   let tip = null;
